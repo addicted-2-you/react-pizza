@@ -51,6 +51,12 @@ function PizzaOrder(props) {
 
   const addPizzaToCart = React.useCallback(() => {
     cart([...currentCart, { ...pizza, selectedModification }]);
+    window.localStorage.setItem(
+      'cart',
+      JSON.stringify([...currentCart, { ...pizza, selectedModification }]),
+    );
+
+    console.log([...currentCart, { ...pizza, selectedModification }]);
   }, [currentCart, pizza, selectedModification]);
 
   return (
