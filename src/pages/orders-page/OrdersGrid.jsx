@@ -19,7 +19,7 @@ function OrdersGrid() {
   }
 
   return (
-    <div className="p-5 grid grid-cols-4 gap-5 bg-gray-200 rounded-lg">
+    <div className="p-5 grid grid-cols-4 gap-5 rounded-lg">
       {data.pizzas.map((pizza) => (
         <PizzaOrder key={pizza.id} pizza={pizza} />
       ))}
