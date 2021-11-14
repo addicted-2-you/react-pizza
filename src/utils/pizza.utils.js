@@ -15,3 +15,8 @@ export const getUniqueSizeOptions = (modifications) =>
         : [...acc, { ...item, name: `${item.size} см.` }],
     [],
   );
+
+export const pizzaSameOrderComparer = ({ cartPizza, id, dough, size }) =>
+  cartPizza.id === id &&
+  cartPizza.selectedModification.dough === dough &&
+  cartPizza.selectedModification.size === size;

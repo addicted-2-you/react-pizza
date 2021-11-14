@@ -27,7 +27,37 @@ function CartPage() {
 
         <hr className="m-auto w-11/12" />
 
-        {currentCart.length ? null : (
+        {currentCart.length ? (
+          <div className="mt-16 mx-auto w-2/3">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Корзина</h2>
+
+              <button className="text-gray-400 cursor-pointer hover:underline" type="button">
+                Очистить корзину
+              </button>
+            </div>
+
+            <hr className="mt-7" />
+
+            <div className="mt-7"></div>
+
+            <div className="mt-10 flex justify-between items-center">
+              <button
+                className="py-2 px-5 text-gray-400 rounded-3xl border-2 border-gray-400 cursor-pointer hover:underline"
+                type="button"
+              >
+                &lt; Вернуться назад
+              </button>
+
+              <button
+                className="py-2 px-5 text-white rounded-3xl bg-yellow-500 border-2 border-yellow-500 cursor-pointer hover:text-yellow-500 hover:bg-white"
+                type="button"
+              >
+                Оплатить
+              </button>
+            </div>
+          </div>
+        ) : (
           <div className="flex flex-col items-center">
             <h2 className="mt-32 text-2xl text-center font-semibold">Корзина пустая 😕</h2>
             <p className="mt-3 text-center text-gray-500">

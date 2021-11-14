@@ -2,7 +2,11 @@ import React from 'react';
 import { useReactiveVar } from '@apollo/client';
 
 import { cart } from '~/gql-client/reactive-variables';
-import { getUniqueDoughOptions, getUniqueSizeOptions } from '~/utils/pizza.utils';
+import {
+  getUniqueDoughOptions,
+  getUniqueSizeOptions,
+  pizzaSameOrderComparer,
+} from '~/utils/pizza.utils';
 
 import PizzaOrderSwitch from './PizzaOrderSwitch';
 
@@ -28,16 +32,22 @@ function PizzaOrder(props) {
     [checkedDoughOption, checkedSizeOption],
   );
 
-  const numberOfSamePizzasAlreadyInCart = React.useMemo(
-    () =>
-      currentCart.filter(
-        (cartPizza) =>
-          cartPizza.id === pizza.id &&
-          cartPizza.selectedModification.dough === selectedModification.dough &&
-          cartPizza.selectedModification.size === selectedModification.size,
-      ).length,
-    [currentCart, pizza, selectedModification],
-  );
+  const numberOfSamePizzasAlreadyInCart = React.useMemo(() => {
+    const sameOrder = currentCart.find((cartPizza) =>
+      pizzaSameOrderComparer({
+        cartPizza,
+        id: pizza.id,
+        dough: selectedModification.dough,
+        size: selectedModification.size,
+      }),
+    );
+
+    if (sameOrder) {
+      return sameOrder.count;
+    }
+
+    return 0;
+  }, [currentCart, pizza, selectedModification]);
 
   const checkDoughOption = React.useCallback(
     (option) => setCheckedDoughOption(option),
@@ -49,14 +59,39 @@ function PizzaOrder(props) {
     [setCheckedSizeOption],
   );
 
+  // TODO: optimize array traversal
   const addPizzaToCart = React.useCallback(() => {
-    cart([...currentCart, { ...pizza, selectedModification }]);
-    window.localStorage.setItem(
-      'cart',
-      JSON.stringify([...currentCart, { ...pizza, selectedModification }]),
+    let modifiedCart = [];
+    const sameOrder = currentCart.find((cartPizza) =>
+      pizzaSameOrderComparer({
+        cartPizza,
+        id: pizza.id,
+        dough: selectedModification.dough,
+        size: selectedModification.size,
+      }),
     );
 
-    console.log([...currentCart, { ...pizza, selectedModification }]);
+    if (sameOrder) {
+      modifiedCart = currentCart.map((cartPizza) => {
+        if (
+          pizzaSameOrderComparer({
+            cartPizza,
+            id: pizza.id,
+            dough: selectedModification.dough,
+            size: selectedModification.size,
+          })
+        ) {
+          return { ...cartPizza, count: cartPizza.count + 1 };
+        }
+
+        return cartPizza;
+      });
+    } else {
+      modifiedCart = [...currentCart, { ...pizza, selectedModification, count: 1 }];
+    }
+
+    cart(modifiedCart);
+    window.localStorage.setItem('cart', JSON.stringify(modifiedCart));
   }, [currentCart, pizza, selectedModification]);
 
   return (
