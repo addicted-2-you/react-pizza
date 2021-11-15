@@ -2,6 +2,7 @@ import React from 'react';
 import { useReactiveVar } from '@apollo/client';
 
 import { cart } from '~/gql-client/reactive-variables';
+
 import {
   getUniqueDoughOptions,
   getUniqueSizeOptions,

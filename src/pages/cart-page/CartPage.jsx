@@ -1,7 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
 import { cart } from '~/gql-client/reactive-variables';
+
+import PizzaCartOrder from '~/components/PizzaCartOrder';
 
 // icons
 import reactPizzaLogo from '~/icons/react-pizza-logo.png';
@@ -9,6 +12,11 @@ import emptyShoppingCart from '~/icons/empty-shopping-cart.png';
 
 function CartPage() {
   const currentCart = useReactiveVar(cart);
+
+  function clearCart() {
+    cart([]);
+    window.localStorage.setItem('cart', JSON.stringify([]));
+  }
 
   return (
     <div className="p-5 h-screen bg-yellow-200">
@@ -32,28 +40,55 @@ function CartPage() {
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold">Корзина</h2>
 
-              <button className="text-gray-400 cursor-pointer hover:underline" type="button">
+              <button
+                className="text-gray-400 cursor-pointer hover:underline"
+                type="button"
+                onClick={clearCart}
+              >
                 Очистить корзину
               </button>
             </div>
 
             <hr className="mt-7" />
 
-            <div className="mt-7"></div>
+            <table className="mt-7 w-full">
+              <tbody>
+                {currentCart.map((pizzaOrder) => (
+                  <PizzaCartOrder key={pizzaOrder.id} pizzaOrder={pizzaOrder} />
+                ))}
+              </tbody>
+            </table>
+
+            <div className="mt-5 flex justify-between">
+              <p>
+                Всего пицц:{' '}
+                <strong>{currentCart.reduce((acc, item) => acc + item.count, 0)} шт.</strong>
+              </p>
+
+              <p>
+                Сумма заказа:{' '}
+                <strong className="text-yellow-500">
+                  {currentCart
+                    .reduce((acc, item) => acc + item.count * item.selectedModification.price, 0)
+                    .toFixed(2)}{' '}
+                  ₽
+                </strong>
+              </p>
+            </div>
 
             <div className="mt-10 flex justify-between items-center">
-              <button
+              <Link
                 className="py-2 px-5 text-gray-400 rounded-3xl border-2 border-gray-400 cursor-pointer hover:underline"
-                type="button"
+                to="/"
               >
                 &lt; Вернуться назад
-              </button>
+              </Link>
 
               <button
-                className="py-2 px-5 text-white rounded-3xl bg-yellow-500 border-2 border-yellow-500 cursor-pointer hover:text-yellow-500 hover:bg-white"
+                className="py-2 px-5 text-yellow-500 rounded-3xl bg-white border-2 border-yellow-500 cursor-pointer hover:text-white hover:bg-yellow-500"
                 type="button"
               >
-                Оплатить
+                Оплатить сейчас
               </button>
             </div>
           </div>
@@ -70,12 +105,12 @@ function CartPage() {
 
             <img className="mt-11" src={emptyShoppingCart} alt="empty shopping cart" />
 
-            <button
+            <Link
               className="mt-10 py-2 px-8 bg-gray-800 text-white cursor-pointer rounded-3xl hover:underline"
-              type="button"
+              to="/"
             >
-              Вернуться назад
-            </button>
+              &lt; Вернуться назад
+            </Link>
           </div>
         )}
       </div>
