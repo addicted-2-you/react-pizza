@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
 
 import { cart } from '~/gql-client/reactive-variables';
+import { CREATE_ORDER } from '~/gql-client/pizza.mutations';
 
 import PizzaCartOrder from '~/components/PizzaCartOrder';
+
+import { transformToOrderedPizzasInput } from '~/utils/pizza.utils';
 
 // icons
 import reactPizzaLogo from '~/icons/react-pizza-logo.png';
@@ -13,10 +16,48 @@ import emptyShoppingCart from '~/icons/empty-shopping-cart.png';
 function CartPage() {
   const currentCart = useReactiveVar(cart);
 
+  const totalPrice = React.useMemo(
+    () =>
+      parseFloat(
+        currentCart
+          .reduce((acc, item) => acc + item.amount * item.selectedModification.price, 0)
+          .toFixed(2),
+        10,
+      ),
+    [currentCart],
+  );
+
+  const totalAmount = React.useMemo(
+    () => currentCart.reduce((acc, item) => acc + item.amount, 0).toFixed(2),
+    [currentCart],
+  );
+
+  const [createOrder] = useMutation(CREATE_ORDER, {
+    variables: {
+      order: {
+        totalPrice,
+        totalAmount,
+        orderedPizzas: [],
+      },
+    },
+  });
+
   function clearCart() {
     cart([]);
     window.localStorage.setItem('cart', JSON.stringify([]));
   }
+
+  const onCreateOrder = React.useCallback(() => {
+    createOrder({
+      variables: {
+        order: {
+          totalPrice,
+          totalAmount: parseInt(totalAmount, 10),
+          orderedPizzas: currentCart.map(transformToOrderedPizzasInput),
+        },
+      },
+    }).then(clearCart);
+  }, [totalPrice, totalAmount, currentCart]);
 
   return (
     <div className="p-5 h-screen bg-yellow-200">
@@ -61,18 +102,11 @@ function CartPage() {
 
             <div className="mt-5 flex justify-between">
               <p>
-                Всего пицц:{' '}
-                <strong>{currentCart.reduce((acc, item) => acc + item.count, 0)} шт.</strong>
+                Всего пицц: <strong>{totalAmount} шт.</strong>
               </p>
 
               <p>
-                Сумма заказа:{' '}
-                <strong className="text-yellow-500">
-                  {currentCart
-                    .reduce((acc, item) => acc + item.count * item.selectedModification.price, 0)
-                    .toFixed(2)}{' '}
-                  ₽
-                </strong>
+                Сумма заказа: <strong className="text-yellow-500">{totalPrice} ₽</strong>
               </p>
             </div>
 
@@ -87,6 +121,7 @@ function CartPage() {
               <button
                 className="py-2 px-5 text-yellow-500 rounded-3xl bg-white border-2 border-yellow-500 cursor-pointer hover:text-white hover:bg-yellow-500"
                 type="button"
+                onClick={onCreateOrder}
               >
                 Оплатить сейчас
               </button>

@@ -20,7 +20,7 @@ function PizzaCartOrder(props) {
           size: pizzaOrder.selectedModification.size,
         })
       ) {
-        return { ...cartPizza, count: cartPizza.count + 1 };
+        return { ...cartPizza, amount: cartPizza.amount + 1 };
       }
 
       return cartPizza;
@@ -40,8 +40,8 @@ function PizzaCartOrder(props) {
           size: pizzaOrder.selectedModification.size,
         })
       ) {
-        if (cartPizza.count > 0) {
-          return { ...cartPizza, count: cartPizza.count - 1 };
+        if (cartPizza.amount > 0) {
+          return { ...cartPizza, amount: cartPizza.amount - 1 };
         }
       }
 
@@ -85,7 +85,7 @@ function PizzaCartOrder(props) {
         <div className="m-auto w-2/3 flex justify-between items-center">
           <button
             className={`h-7 w-7 font-bold border-2 rounded-full  ${
-              pizzaOrder.count > 0
+              pizzaOrder.amount > 0
                 ? 'text-yellow-500 border-yellow-500 cursor-pointer hover:bg-yellow-500 hover:text-white'
                 : 'text-gray-300 border-gray-300 cursor-default'
             }`}
@@ -95,7 +95,7 @@ function PizzaCartOrder(props) {
             -
           </button>
 
-          <p className="mx-3">{pizzaOrder.count}</p>
+          <p className="mx-3">{pizzaOrder.amount}</p>
 
           <button
             className="h-7 w-7 text-yellow-500 font-bold border-2 border-yellow-500 rounded-full cursor-pointer hover:bg-yellow-500 hover:text-white"
@@ -109,7 +109,7 @@ function PizzaCartOrder(props) {
 
       <td>
         <p className="text-xl font-bold text-center">
-          {(pizzaOrder.count * pizzaOrder.selectedModification.price).toFixed(2)} ₽
+          {(pizzaOrder.amount * pizzaOrder.selectedModification.price).toFixed(2)} ₽
         </p>
       </td>
 

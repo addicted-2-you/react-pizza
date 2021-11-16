@@ -20,3 +20,15 @@ export const pizzaSameOrderComparer = ({ cartPizza, id, dough, size }) =>
   cartPizza.id === id &&
   cartPizza.selectedModification.dough === dough &&
   cartPizza.selectedModification.size === size;
+
+export const transformToOrderedPizzasInput = ({
+  amount,
+  name,
+  selectedModification: { dough, size, price },
+}) => ({
+  dough,
+  price,
+  pizzaName: name,
+  size: parseInt(size, 10),
+  amount: parseInt(amount, 10),
+});

@@ -44,7 +44,7 @@ function PizzaOrder(props) {
     );
 
     if (sameOrder) {
-      return sameOrder.count;
+      return sameOrder.amount;
     }
 
     return 0;
@@ -82,13 +82,13 @@ function PizzaOrder(props) {
             size: selectedModification.size,
           })
         ) {
-          return { ...cartPizza, count: cartPizza.count + 1 };
+          return { ...cartPizza, amount: cartPizza.amount + 1 };
         }
 
         return cartPizza;
       });
     } else {
-      modifiedCart = [...currentCart, { ...pizza, selectedModification, count: 1 }];
+      modifiedCart = [...currentCart, { ...pizza, selectedModification, amount: 1 }];
     }
 
     cart(modifiedCart);
