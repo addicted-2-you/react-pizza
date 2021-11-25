@@ -1,12 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
+
+import { orderBy } from '~/gql-client/reactive-variables';
+
+import OrdersGrid from './OrdersGrid';
 
 // icons
 import reactPizzaLogo from '~/icons/react-pizza-logo.png';
 
-import OrdersGrid from './OrdersGrid';
-
 function OrdersPage() {
+  const currentOrderBy = useReactiveVar(orderBy);
+
+  function onOrderBySelectChange({ target: { value } }) {
+    orderBy(value);
+  }
+
   return (
     <div className="p-5 min-h-screen bg-yellow-200">
       <div className="h-full bg-white rounded-lg">
@@ -29,6 +38,29 @@ function OrdersPage() {
         </header>
 
         <hr className="m-auto w-11/12" />
+
+        <div className="flex justify-between">
+          <label htmlFor="order-by-select">
+            <span>Сортировка по: </span>
+
+            <select
+              className="text-yellow-600 font-semibold underline"
+              id="order-by-select"
+              value={currentOrderBy}
+              onChange={onOrderBySelectChange}
+            >
+              <option className="text-black" value="popularity">
+                полулярности
+              </option>
+              <option className="text-black" value="price">
+                цене
+              </option>
+              <option className="text-black" value="alphabet">
+                алфавиту
+              </option>
+            </select>
+          </label>
+        </div>
 
         <div className="p-2">
           <OrdersGrid />

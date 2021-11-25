@@ -32,3 +32,6 @@ export const transformToOrderedPizzasInput = ({
   size: parseInt(size, 10),
   amount: parseInt(amount, 10),
 });
+
+export const getPizzaAveragePrice = (pizza) =>
+  pizza.modifications.reduce((acc, item) => acc + item.price, 0) / pizza.modifications.length;

@@ -62,7 +62,7 @@ function CartPage() {
   return (
     <div className="p-5 h-screen bg-yellow-200">
       <div className="h-full bg-white rounded-lg">
-        {/* TODO: move header to the component */}
+        {/* TODO: move header to the shared component */}
         <header className="px-20 pt-14 pb-7 flex justify-between ">
           <div className="flex justify-center items-center">
             <img className="mr-4 row-span-2" src={reactPizzaLogo} alt="react pizza logo" />
