@@ -53,7 +53,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'all'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Все
@@ -73,7 +73,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'meat'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Мясные
@@ -93,7 +93,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'vegetarian'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Вегетарианские
@@ -113,7 +113,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'gril'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Гриль
@@ -133,7 +133,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'spicy'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Острые
@@ -153,7 +153,7 @@ function OrdersPage() {
                 className={`${
                   currentPizzasFilterType === 'covered'
                     ? 'text-white bg-gray-800 hover:bg-gray-700'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 } py-1 px-4 cursor-pointer rounded-xl`}
               >
                 Закрытые
