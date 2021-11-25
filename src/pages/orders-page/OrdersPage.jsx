@@ -2,16 +2,33 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
-import { orderBy, pizzasFilterType } from '~/gql-client/reactive-variables';
+import { cart, orderBy, pizzasFilterType } from '~/gql-client/reactive-variables';
 
 import OrdersGrid from './OrdersGrid';
 
 // icons
 import reactPizzaLogo from '~/icons/react-pizza-logo.png';
+import shoppingCartIcon from '~/icons/shopping-cart-icon.svg';
 
 function OrdersPage() {
+  const currentCart = useReactiveVar(cart);
   const currentOrderBy = useReactiveVar(orderBy);
   const currentPizzasFilterType = useReactiveVar(pizzasFilterType);
+
+  const totalCartPrice = React.useMemo(
+    () =>
+      currentCart
+        .reduce((acc, item) => acc + item.amount * item.selectedModification.price, 0)
+        .toFixed(2),
+
+    [currentCart],
+  );
+
+  const totalPizzasAmount = React.useMemo(
+    () => currentCart.reduce((acc, item) => acc + item.amount, 0),
+
+    [currentCart],
+  );
 
   function onPizzaTypeFilterChange({ target: { value } }) {
     if (value) {
@@ -27,20 +44,30 @@ function OrdersPage() {
     <div className="p-5 min-h-screen bg-yellow-200">
       <div className="h-full bg-white rounded-lg">
         <header className="px-20 pt-14 pb-7 flex justify-between items-center">
-          <div className="flex justify-center items-center">
-            <img className="mr-4 row-span-2" src={reactPizzaLogo} alt="react pizza logo" />
-          </div>
+          <Link className="flex" to="/">
+            <div className="flex justify-center items-center">
+              <img className="mr-4 row-span-2" src={reactPizzaLogo} alt="react pizza logo" />
+            </div>
 
-          <div className="flex flex-grow flex-col items-start">
-            <h1 className="text-2xl font-bold uppercase">React Pizza</h1>
-            <h2 className=" text-lg font-bold text-gray-400">самая вкусная пицца во вселенной</h2>
-          </div>
+            <div className="flex flex-grow flex-col items-start">
+              <h1 className="text-2xl font-bold uppercase">React Pizza</h1>
+              <h2 className=" text-lg font-bold text-gray-400">самая вкусная пицца во вселенной</h2>
+            </div>
+          </Link>
 
           <Link
-            className="py-1 px-6 bg-yellow-500 rounded-2xl text-white font-semibold border-none cursor-pointer hover:underline"
+            className="py-1 px-3 flex items-center text-white font-semibold  bg-yellow-500 rounded-2xl border-none cursor-pointer hover:underline"
             to="/cart"
           >
-            Корзина
+            <span>{totalCartPrice}</span>
+
+            <span className="ml-1">₽</span>
+
+            <span className="mx-2">|</span>
+
+            <img className="mr-1" height="14" src={shoppingCartIcon} alt="shopping cart" />
+
+            <span>{totalPizzasAmount}</span>
           </Link>
         </header>
 

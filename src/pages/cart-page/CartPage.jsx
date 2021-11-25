@@ -64,14 +64,16 @@ function CartPage() {
       <div className="h-full bg-white rounded-lg">
         {/* TODO: move header to the shared component */}
         <header className="px-20 pt-14 pb-7 flex justify-between ">
-          <div className="flex justify-center items-center">
-            <img className="mr-4 row-span-2" src={reactPizzaLogo} alt="react pizza logo" />
-          </div>
+          <Link className="flex" to="/">
+            <div className="flex justify-center items-center">
+              <img className="mr-4 row-span-2" src={reactPizzaLogo} alt="react pizza logo" />
+            </div>
 
-          <div className="flex flex-grow flex-col items-start">
-            <h1 className="text-2xl font-bold uppercase">React Pizza</h1>
-            <h2 className=" text-lg font-bold text-gray-400">самая реактивная пицца</h2>
-          </div>
+            <div className="flex flex-grow flex-col items-start">
+              <h1 className="text-2xl font-bold uppercase">React Pizza</h1>
+              <h2 className=" text-lg font-bold text-gray-400">самая реактивная пицца</h2>
+            </div>
+          </Link>
         </header>
 
         <hr className="m-auto w-11/12" />
@@ -95,7 +97,10 @@ function CartPage() {
             <table className="mt-7 w-full">
               <tbody>
                 {currentCart.map((pizzaOrder) => (
-                  <PizzaCartOrder key={pizzaOrder.id} pizzaOrder={pizzaOrder} />
+                  <PizzaCartOrder
+                    key={`${pizzaOrder.id}-${pizzaOrder.selectedModification.id}`}
+                    pizzaOrder={pizzaOrder}
+                  />
                 ))}
               </tbody>
             </table>
