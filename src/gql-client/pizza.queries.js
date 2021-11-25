@@ -7,6 +7,7 @@ export const GET_ALL_PIZZAS = gql`
       name
       image
       popularity
+      types
       modifications {
         id
         dough

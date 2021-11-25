@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery, useReactiveVar } from '@apollo/client';
 
 // gql
-import { orderBy } from '~/gql-client/reactive-variables';
+import { orderBy, pizzasFilterType } from '~/gql-client/reactive-variables';
 import { GET_ALL_PIZZAS } from '~/gql-client/pizza.queries';
 
 // components
@@ -15,6 +15,7 @@ function OrdersGrid() {
   const { data, loading, error } = useQuery(GET_ALL_PIZZAS);
 
   const currentOrderBy = useReactiveVar(orderBy);
+  const currentPizzasFilterType = useReactiveVar(pizzasFilterType);
 
   const orderedPizzas = React.useMemo(() => {
     if (data) {
@@ -54,6 +55,14 @@ function OrdersGrid() {
     return [];
   }, [data, currentOrderBy]);
 
+  const filteredPizzas = React.useMemo(() => {
+    if (currentPizzasFilterType === 'all') {
+      return orderedPizzas;
+    }
+
+    return orderedPizzas.filter((pizza) => pizza.types.includes(currentPizzasFilterType));
+  }, [orderedPizzas, currentPizzasFilterType]);
+
   if (loading) {
     return <p className="italic">Loading!</p>;
   }
@@ -64,7 +73,7 @@ function OrdersGrid() {
 
   return (
     <div className="p-5 grid grid-cols-4 gap-5 rounded-lg">
-      {orderedPizzas.map((pizza) => (
+      {filteredPizzas.map((pizza) => (
         <PizzaOrder key={pizza.id} pizza={pizza} />
       ))}
     </div>

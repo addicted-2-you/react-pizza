@@ -5,3 +5,5 @@ export const cart = makeVar(
 );
 
 export const orderBy = makeVar('popularity');
+
+export const pizzasFilterType = makeVar('all');
